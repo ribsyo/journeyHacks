@@ -32,7 +32,7 @@ def generateRequest(requestData: RequestData) -> str:
     return request
 
 def getDetails(place_id: str) -> dict:
-    request = f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=name,rating,reviews,business_status,opening_hours,user_ratings_total,serves_vegetarian_food,serves_wine,serves_beer&key={api_key}'
+    request = f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=name,rating,reviews,business_status,opening_hours,user_ratings_total,serves_vegetarian_food,serves_wine,serves_beer,formatted_address&key={api_key}'
     response = requests.get(request)
     return response.json()
 
@@ -79,6 +79,7 @@ if __name__ == "__main__":
         print(f"Serves Vegetarian Food: {details['result'].get('serves_vegetarian_food', 'N/A')}")
         print(f"Serves Wine: {details['result'].get('serves_wine', 'N/A')}")
         print(f"Serves Beer: {details['result'].get('serves_beer', 'N/A')}")
+        print(f"Address: {details['result'].get('formatted_address', 'N/A')}")
 
         print("\nReviews:")
         reviews = details['result'].get('reviews', [])
