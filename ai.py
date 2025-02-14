@@ -1,6 +1,8 @@
 import requests
 import json
 
+input = "I want to eat something salty, what should I eat in 10 words?"
+
 response = requests.post(
     url="https://openrouter.ai/api/v1/chat/completions",
     headers={
@@ -10,14 +12,22 @@ response = requests.post(
         "X-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
     },
     data=json.dumps({
-        "model": "deepseek/deepseek-r1-distill-llama-70b:free",
+        "model": "google/gemini-2.0-pro-exp-02-05:free",
         "messages": [
+    {
+        "role": "user",
+        "content": [
         {
-            "role": "user",
-            "content": "What is the meaning of life in less than 10 words?"
-        }
+            "type": "text",
+            "text": input
+        },
+        ]
+    }
     ],
-    })
+})
 )
 
-print(response.json())
+data = response.json()
+content = data['choices'][0]['message']['content']
+print(content)
+
