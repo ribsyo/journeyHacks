@@ -1,34 +1,35 @@
 import os
 from dotenv import load_dotenv
 import requests
+
+from dataModels import Location, RequestData
 # Load environment variables from .env file
 load_dotenv(dotenv_path='credentials/credentials.env')
 
 # Access the API key
 api_key = os.getenv('API_KEY')
-url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/output?parameters'
-
-# https://places.googleapis.com/v1/places/GyuEmsRBfy61i59si0?fields=addressComponents&key=YOUR_API_KEY
+url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
 
 
-# nearby seach url
-# https://maps.googleapis.com/maps/api/place/nearbysearch/output?parameters
-
-'''
-https://maps.googleapis.com/maps/api/place/nearbysearch/json
-  ?keyword=cruise
-  &location=-33.8670522%2C151.1957362
-  &radius=1500
-  &type=restaurant
-  &key=YOUR_API_KEY
-'''
-
-def testRequest() -> dict:
-    
-    response = requests.get(url)
+def findResturants(requestData: RequestData) -> dict:
+    response = requests.get(generateRequest(requestData))
+    print(generateRequest(requestData))
     return response.json()
 
+def generateRequest(requestData: RequestData) -> str:
+    request = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
+    data = requestData.toDict()
 
+    request += f"location={data['location'].latitude}%2C{data['location'].longitude}"
+
+    for key in data:
+
+        if data[key] is not None and key != "location":
+            request += f"&{key}={data[key]}"
+
+    request += f"&type=restaurant"
+    request += f"&key={api_key}"
+    return request
 
 if __name__ == "__main__":
-    print(testRequest())
+    print("hello world")
