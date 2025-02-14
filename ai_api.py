@@ -1,7 +1,8 @@
 import requests
 import json
 
-input = "I want to eat something salty, what should I eat in 10 words?"
+user_input = "I want some soup, I feel empty"
+prompt = ". With this, write ONLY a JSON file without anything else which includes keyword (Cuisine or a specific food type or a word to represent all range of food like Chinese food) for the restaurant to eat, radius, min price and max price as parameters (keyword, radius, min_price, max_price) where price is from google maps 1-4 scale and only one JSON only"
 
 response = requests.post(
     url="https://openrouter.ai/api/v1/chat/completions",
@@ -19,7 +20,7 @@ response = requests.post(
         "content": [
         {
             "type": "text",
-            "text": input
+            "text": user_input + prompt
         },
         ]
     }
@@ -27,7 +28,9 @@ response = requests.post(
 })
 )
 
-data = response.json()
-content = data['choices'][0]['message']['content']
-print(content)
-
+data_json = response.json()
+content = data_json['choices'][0]['message']['content']
+cleaned_content = content.replace("```json", "").replace("```", "").strip()
+print(cleaned_content)
+data = json.loads(cleaned_content)
+print(data)
