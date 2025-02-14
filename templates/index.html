@@ -2,9 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Helper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <h2>What you do want to eat pookie <3</h2>
+    <form action="/recommend" method="post">
+        <input type="text" name="query" placeholder="What kind of food do you want" required>
+        <button type="submit">Let's Go!</button>
+    </form>
+
+    {% if results %}
+        <h3>Here are some recommendations:</h3>
+        <ul>
+            {% for place in results %}
+                <li><strong>{{ place.name }}</strong></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="taco-container"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
