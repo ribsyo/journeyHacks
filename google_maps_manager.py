@@ -1,12 +1,8 @@
 import os
 
 import requests
-from dotenv import load_dotenv
 
 from data_models import RequestData
-
-# Load environment variables from .env file
-load_dotenv(dotenv_path="credentials/credentials.env")
 
 
 def find_restaurants(request_data: RequestData, base_url: str, api_key: str) -> dict:
@@ -37,7 +33,7 @@ def get_details(place_id: str, base_url: str) -> dict:
     return response.json()
 
 
-def get_top_restaurant(request_data: RequestData) -> None:
+def test(request_data: RequestData) -> None:
     # Access the API key
     api_key = os.getenv("API_KEY")
     nearby_search_base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
@@ -86,4 +82,4 @@ def get_top_restaurant(request_data: RequestData) -> None:
 
 
 if __name__ == "__main__":
-    get_top_restaurant()
+    test()
