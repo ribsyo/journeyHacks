@@ -39,7 +39,7 @@ def generate_restaurant_search_query(user_message: str, starting_location: Locat
 
     request_data = RequestData(
         location=starting_location,
-        radius=1000,  # 5 km radius
+        radius=1000,  # 1 km radius
     )
     while True:
         try:
