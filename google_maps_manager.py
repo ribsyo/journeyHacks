@@ -3,7 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from dataModels import Location, RequestData
+from data_models import RequestData
 
 # Load environment variables from .env file
 load_dotenv(dotenv_path="credentials/credentials.env")
@@ -37,27 +37,14 @@ def get_details(place_id: str, base_url: str) -> dict:
     return response.json()
 
 
-def main() -> None:
+def main(request_data: RequestData) -> None:
     # Access the API key
     api_key = os.getenv("API_KEY")
     nearby_search_base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     details_base_url = "https://maps.googleapis.com/maps/api/place/details/json"
-    sfu_burnaby_location = Location(longitude=-122.9199, latitude=49.2781)
-
-    # Create a dummy Request object
-    dummy_request = RequestData(
-        location=sfu_burnaby_location,
-        radius=1000,  # 1 km radius
-        keyword="pizza",
-        language="en",
-        min_price=1,
-        max_price=4,
-        open_now=True,
-        rank_by="prominence",
-    )
 
     # Get the response from the findRestaurants function
-    responses = find_restaurants(dummy_request, nearby_search_base_url, api_key)["results"]
+    responses = find_restaurants(request_data, nearby_search_base_url, api_key)["results"]
 
     # Print the top response formatted for human view and get details
     if responses:

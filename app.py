@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request
 
+import ai_api
+from data_models import Location
 
 app = Flask(__name__)
+sfu_burnaby_location = Location(longitude=-122.9199, latitude=49.2781)
 
 
 @app.route("/")
