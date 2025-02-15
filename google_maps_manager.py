@@ -83,7 +83,6 @@ def get_top_restaurant(request_data: RequestData) -> None:
             print("No reviews found.")
     else:
         print("No responses found.")
-    return responses[0]
 
 
 if __name__ == "__main__":
