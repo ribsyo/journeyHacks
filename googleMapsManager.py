@@ -1,29 +1,25 @@
 import os
-from dotenv import load_dotenv
+
 import requests
+from dotenv import load_dotenv
 
 from dataModels import Location, RequestData
 
 # Load environment variables from .env file
 load_dotenv(dotenv_path="credentials/credentials.env")
 
-# Access the API key
-api_key = os.getenv("API_KEY")
-url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
-detailUrl = "https://maps.googleapis.com/maps/api/place/details/output?"
 
-
-def findResturants(requestData: RequestData) -> dict:
-    response = requests.get(generateRequest(requestData))
-    print(generateRequest(requestData))
+def find_restaurants(request_data: RequestData, base_url: str, api_key: str) -> dict:
+    response = requests.get(generateRequest(request_data, base_url, api_key))
+    print(generateRequest(request_data, base_url, api_key))
     return response.json()
 
 
-def generateRequest(requestData: RequestData) -> str:
-    request = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
-    data = requestData.toDict()
+def generateRequest(request_data: RequestData, base_url: str, api_key: str) -> str:
+    request = base_url
+    data = request_data.toDict()
 
-    request += f"location={data['location'].latitude}%2C{data['location'].longitude}"
+    request += f"?location={data['location'].latitude}%2C{data['location'].longitude}"
 
     for key in data:
 
@@ -35,14 +31,17 @@ def generateRequest(requestData: RequestData) -> str:
     return request
 
 
-def getDetails(place_id: str) -> dict:
-    request = f"https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=name,rating,reviews,business_status,opening_hours,user_ratings_total,serves_vegetarian_food,serves_wine,serves_beer,formatted_address&key={api_key}"
+def get_details(place_id: str, base_url: str) -> dict:
+    request = f"{base_url}?place_id={place_id}&fields=name,rating,reviews,business_status,opening_hours,user_ratings_total,serves_vegetarian_food,serves_wine,serves_beer,formatted_address&key={api_key}"
     response = requests.get(request)
     return response.json()
 
 
-if __name__ == "__main__":
-    print("hello world")
+def main() -> None:
+    # Access the API key
+    api_key = os.getenv("API_KEY")
+    nearby_search_base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+    details_base_url = "https://maps.googleapis.com/maps/api/place/details/json"
     sfu_burnaby_location = Location(longitude=-122.9199, latitude=49.2781)
 
     # Create a dummy Request object
@@ -58,7 +57,7 @@ if __name__ == "__main__":
     )
 
     # Get the response from the findRestaurants function
-    responses = findResturants(dummy_request)["results"]
+    responses = find_restaurants(dummy_request, nearby_search_base_url, api_key)["results"]
 
     # Print the top response formatted for human view and get details
     if responses:
@@ -71,7 +70,7 @@ if __name__ == "__main__":
 
         # Get place details
         place_id = top_response["place_id"]
-        details = getDetails(place_id)
+        details = get_details(place_id, details_base_url)
         print("\nPlace Details:")
         print(f"Name: {details['result'].get('name', 'N/A')}")
         print(f"Rating: {details['result'].get('rating', 'N/A')}")
@@ -97,3 +96,7 @@ if __name__ == "__main__":
             print("No reviews found.")
     else:
         print("No responses found.")
+
+
+if __name__ == "__main__":
+    main()
