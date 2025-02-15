@@ -12,24 +12,23 @@ response = requests.post(
         "HTTP-Referer": "<YOUR_SITE_URL>",
         "X-Title": "<YOUR_SITE_NAME>",
     },
-    data=json.dumps({
-        "model": "google/gemini-2.0-pro-exp-02-05:free",
-        "messages": [
-    {
-        "role": "user",
-        "content": [
+    data=json.dumps(
         {
-            "type": "text",
-            "text": user_input + prompt
-        },
-        ]
-    }
-    ],
-})
+            "model": "google/gemini-2.0-pro-exp-02-05:free",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": user_input + prompt},
+                    ],
+                }
+            ],
+        }
+    ),
 )
 
 data_json = response.json()
-content = data_json['choices'][0]['message']['content']
+content = data_json["choices"][0]["message"]["content"]
 cleaned_content = content.replace("```json", "").replace("```", "").strip()
 print(cleaned_content)
 data = json.loads(cleaned_content)

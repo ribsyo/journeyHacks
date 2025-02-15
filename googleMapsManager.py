@@ -3,21 +3,24 @@ from dotenv import load_dotenv
 import requests
 
 from dataModels import Location, RequestData
+
 # Load environment variables from .env file
-load_dotenv(dotenv_path='credentials/credentials.env')
+load_dotenv(dotenv_path="credentials/credentials.env")
 
 # Access the API key
-api_key = os.getenv('API_KEY')
-url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
-detailUrl = 'https://maps.googleapis.com/maps/api/place/details/output?'
+api_key = os.getenv("API_KEY")
+url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
+detailUrl = "https://maps.googleapis.com/maps/api/place/details/output?"
+
 
 def findResturants(requestData: RequestData) -> dict:
     response = requests.get(generateRequest(requestData))
     print(generateRequest(requestData))
     return response.json()
 
+
 def generateRequest(requestData: RequestData) -> str:
-    request = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
+    request = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
     data = requestData.toDict()
 
     request += f"location={data['location'].latitude}%2C{data['location'].longitude}"
@@ -31,10 +34,12 @@ def generateRequest(requestData: RequestData) -> str:
     request += f"&key={api_key}"
     return request
 
+
 def getDetails(place_id: str) -> dict:
-    request = f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=name,rating,reviews,business_status,opening_hours,user_ratings_total,serves_vegetarian_food,serves_wine,serves_beer,formatted_address&key={api_key}'
+    request = f"https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=name,rating,reviews,business_status,opening_hours,user_ratings_total,serves_vegetarian_food,serves_wine,serves_beer,formatted_address&key={api_key}"
     response = requests.get(request)
     return response.json()
+
 
 if __name__ == "__main__":
     print("hello world")
@@ -49,13 +54,11 @@ if __name__ == "__main__":
         min_price=1,
         max_price=4,
         open_now=True,
-        rank_by="prominence"
+        rank_by="prominence",
     )
 
     # Get the response from the findRestaurants function
-    responses = findResturants(dummy_request)['results']
-
-    
+    responses = findResturants(dummy_request)["results"]
 
     # Print the top response formatted for human view and get details
     if responses:
@@ -67,7 +70,7 @@ if __name__ == "__main__":
         print(f"User Ratings Total: {top_response.get('user_ratings_total', 'N/A')}")
 
         # Get place details
-        place_id = top_response['place_id']
+        place_id = top_response["place_id"]
         details = getDetails(place_id)
         print("\nPlace Details:")
         print(f"Name: {details['result'].get('name', 'N/A')}")
@@ -82,7 +85,7 @@ if __name__ == "__main__":
         print(f"Address: {details['result'].get('formatted_address', 'N/A')}")
 
         print("\nReviews:")
-        reviews = details['result'].get('reviews', [])
+        reviews = details["result"].get("reviews", [])
         if reviews:
             for review in reviews:
                 print(f"Author: {review.get('author_name', 'N/A')}")

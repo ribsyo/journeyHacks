@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request
-import requests
 
 
 app = Flask(__name__)
+
 
 @app.route("/")
 def home():
@@ -18,13 +18,9 @@ def recommend():
 
         # query is the response, use to get the value from the user input
         if query:
-            results = [
-                {"name": f"Best {query} Restaurant"}
-            ]
+            results = [{"name": f"Best {query} Restaurant"}]
 
     return render_template("index.html", results=results)
-
-
 
 
 if __name__ == "__main__":
