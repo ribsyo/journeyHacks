@@ -32,8 +32,10 @@ def recommend():
         # query is the response, use to get the value from the user input
         if query:
             request_data = ai_api.generate_restaurant_search_query(query, sfu_burnaby_location)
-            resuts = google_maps_manager.find_restaurants(request_data, nearby_search_base_url, api_key)["results"]
-            results = [{"name": f"Best {query} Restaurant"}]
+            top_result = google_maps_manager.find_restaurants(request_data, nearby_search_base_url, api_key)["results"][
+                0
+            ]
+            # results = [{"name": f"Best {query} Restaurant"}]
 
     return render_template("index.html", results=results)
 
