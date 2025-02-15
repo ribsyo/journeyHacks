@@ -21,6 +21,7 @@ def recommend():
 
         # query is the response, use to get the value from the user input
         if query:
+            request_data = ai_api.generate_restaurant_search_query(query, sfu_burnaby_location)
             results = [{"name": f"Best {query} Restaurant"}]
 
     return render_template("index.html", results=results)

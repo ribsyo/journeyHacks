@@ -37,7 +37,7 @@ def get_details(place_id: str, base_url: str) -> dict:
     return response.json()
 
 
-def main(request_data: RequestData) -> None:
+def get_top_restaurant(request_data: RequestData) -> None:
     # Access the API key
     api_key = os.getenv("API_KEY")
     nearby_search_base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
@@ -86,4 +86,4 @@ def main(request_data: RequestData) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    get_top_restaurant()
