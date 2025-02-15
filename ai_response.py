@@ -3,7 +3,8 @@ import json
 
 personality = ["extremely friendly", "friendly", "normal", "aggressive", "very aggressive"]
 
-def ai_response(input):
+
+def ai_response(input) -> str:
     def get_ai_pick(input):
         response = requests.post(
             url="https://openrouter.ai/api/v1/chat/completions",
@@ -32,5 +33,4 @@ def ai_response(input):
     prompt = f"Tell a user with a {personality[4]} tone that they should go to {input['name']} (that you picked) for a meal. The restaurant is located at {input['vicinity']}. The restaurant has a rating of {input['rating']}."
 
     data_json = get_ai_pick(prompt).json()
-    content = data_json["choices"][0]["message"]["content"]
-    print(content)
+    return data_json["choices"][0]["message"]["content"]

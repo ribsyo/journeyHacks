@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request
 
 import ai_api
+import ai_response
 from data_models import Location
 import google_maps_manager
 
@@ -32,10 +33,13 @@ def recommend():
         # query is the response, use to get the value from the user input
         if query:
             request_data = ai_api.generate_restaurant_search_query(query, sfu_burnaby_location)
-            top_result = google_maps_manager.find_restaurants(request_data, nearby_search_base_url, api_key)["results"][
-                0
-            ]
-            # results = [{"name": f"Best {query} Restaurant"}]
+            print(request_data)
+            restaurants = google_maps_manager.find_restaurants(request_data, nearby_search_base_url, api_key)
+            print(restaurants)
+            if restaurants.get("results") and len(restaurants["results"]) > 0:
+                # results = ai_response.ai_response(restaurants["results"][0])
+                results = restaurants["results"]
+                print(results)
 
     return render_template("index.html", results=results)
 
